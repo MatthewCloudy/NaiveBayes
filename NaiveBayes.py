@@ -1,5 +1,4 @@
 import math
-
 import numpy as np
 
 class NaiveBayes:
@@ -25,8 +24,8 @@ class NaiveBayes:
             self.classes_prob[c] = self.classes_count[c]/X_train.shape[0]
             self.mean[c] = np.mean(np.array(class_attributes[c]), axis=0)
             self.st_dev[c] = np.var(np.array(class_attributes[c]), axis=0)
-        print(self.mean)
-        print(self.st_dev)
+        # print(self.mean)
+        # print(self.st_dev)
 
 
     def predict(self,X):
@@ -38,6 +37,5 @@ class NaiveBayes:
                 for j in range(X.shape[1]):
                     prediction_value[c]*= ((1 / math.sqrt(2*math.pi*self.st_dev[c][j]))*
                                            (math.exp(-(X[i,j]-self.mean[c][j])**2/(2*self.st_dev[c][j]))))
-            print(prediction_value)
             predictions.append(max(prediction_value, key=prediction_value.get))
         return predictions

@@ -1,6 +1,9 @@
 from NaiveBayes import NaiveBayes
 from ucimlrepo import fetch_ucirepo
 import numpy as np
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from matplotlib import pyplot as plt
+import seaborn as sns
 
 def load_split_data():
     iris = fetch_ucirepo(id=53)
@@ -25,7 +28,27 @@ def test_NB():
     nb = NaiveBayes()
     nb.fit(X_train, y_train)
 
-    print(nb.predict(X_test))
+    y_pred = nb.predict(X_test)
+    print(y_pred)
     print(y_test)
+    print("Dokładność:", accuracy_score(y_test, y_pred))
+
+    print("Raport klasyfikacji:")
+    print(classification_report(y_test, y_pred))
+    labels = sorted(list(set(y_test)))
+
+    cm = confusion_matrix(y_test, y_pred, labels=labels)
+    print("Macierz pomyłek:")
+    print(cm)
+
+    plt.figure(figsize=(6, 4))
+    sns.heatmap(np.array(cm), annot=True, fmt='d', cmap='Blues',
+                xticklabels=labels, yticklabels=labels)
+    plt.xlabel('Przewidziana klasa')
+    plt.ylabel('Prawdziwa klasa')
+    plt.title('Macierz pomyłek')
+    plt.show()
+
 if __name__ == '__main__':
+    np.random.seed(42)
     test_NB()
